@@ -1,51 +1,37 @@
 N = int(input())
 arr = [list(map(int, input().split())) for _ in range(N)]
 
-from collections import deque
+dp = [[0]*N for _ in range(N)]
 
-def bfs(left, right):
+def init():
+    dp[0][0] = arr[0][0]
+    for i in range(1, N):
+        dp[i][0] = max(dp[i-1][0], arr[i][0])
+
+    for j in range(1, N):
+        dp[0][j] = max(dp[0][j-1], arr[0][j])
+
+def solve(lb):
+    for i in range(N):
+        for j in range(N):
+            if arr[i][j] < lb:
+                arr[i][j] = 2**31
     
-    if not left <= arr[0][0] <= right:
-        return False
+    init()
 
-    q = deque()
-    v = [[0]*N for _ in range(N)]
-
-    q.append((0, 0))
-    v[0][0] = 1
-
-    while q:
-        ci, cj = q.popleft()
-
-        if (ci, cj) == (N-1, N-1):
-            return True
-
-        for di, dj in ((1, 0), (0, 1)):
-            ni, nj = ci+di, cj+dj
-
-            if 0<=ni<N and 0<=nj<N and v[ni][nj] == 0 and left <= arr[ni][nj] <= right:
-                q.append((ni, nj))
-                v[ni][nj] = 1
+    for i in range(1, N):
+        for j in range(1, N):
+            dp[i][j] = max(min(dp[i-1][j], dp[i][j-1]), arr[i][j])
     
-    return False
+    return dp[N-1][N-1]
 
-nums = set()
-for i in range(N):
-    for j in range(N):
-        nums.add(arr[i][j])
-nums = sorted(list(nums))
+ans = 2**31
+for lb in range(1, 101):
+    ub = solve(lb)
 
-l, r = 0, 0
-mn = 2**31
+    if ub == 2**31:
+        continue
+    
+    ans = min(ans, ub-lb)
 
-while l < len(nums) and r < len(nums):
-    left = nums[l]
-    right = nums[r]
-
-    if bfs(left, right):
-        mn = min(mn, right-left)
-        l += 1
-    else:
-        r += 1
-
-print(mn)
+print(ans)
