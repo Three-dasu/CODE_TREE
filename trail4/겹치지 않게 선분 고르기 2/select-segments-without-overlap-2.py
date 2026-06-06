@@ -9,9 +9,9 @@ dp = [1]*N
 
 for i, (a1, b1) in enumerate(lst):
     
-    for j in range(i+1, N):
+    for j in range(i):
         a2, b2 = lst[j]
-        if a2 > b1:
-            dp[j] = max(dp[i]+1, dp[j])
+        if b2 < a1:
+            dp[i] = max(dp[j]+1, dp[i])
     
 print(max(dp))
