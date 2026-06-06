@@ -5,12 +5,13 @@ for _ in range(N):
     lst.append((a, b))
 
 lst.sort(lambda x: (x[1]))
-cnt, pos = 0, -1
-for i, (a, b) in enumerate(lst):
-    if pos >= a:
-        continue
-    
-    pos = b
-    cnt += 1
+dp = [1]*N
 
-print(cnt)
+for i, (a1, b1) in enumerate(lst):
+    
+    for j in range(i+1, N):
+        a2, b2 = lst[j]
+        if a2 > b1:
+            dp[j] = max(dp[i]+1, dp[j])
+    
+print(max(dp))
