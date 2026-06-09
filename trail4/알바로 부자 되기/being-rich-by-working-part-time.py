@@ -11,11 +11,11 @@ for i in range(N):
 for i in range(N):
     s, e, p = jobs[i]
 
-    for j in range(i+1, N):
-        ns, ne, np = jobs[j]
+    for j in range(i):
+        ps, pe, pp = jobs[j]
 
-        if e < ns:
-            dp[j] = max(dp[j], dp[i] + np)
+        if pe < s:
+            dp[i] = max(dp[i], dp[j] + p)
 
 
 print(max(dp))
