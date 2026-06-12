@@ -13,6 +13,8 @@ if tot%2 == 1:
     print('No')
     exit()
 
+tot = tot // 2
+
 # dp[i][j]: i번째까지 고려했을 때 합 j 만들 수 있냐
 dp = [[0]*(tot+1) for _ in range(N+1)]
 dp[0][0] = 1
@@ -22,17 +24,14 @@ for i, num in enumerate(lst):
         continue
     for j in range(tot, -1, -1):
         # 실제로 i번째 숫자를 더하는 경우
-        if j-num >= 0 and dp[i-1][j-num] == 1:
+        if j-num >= 0 and dp[i-1][j-num]:
             dp[i][j] = 1
         
         # 안더하는 경우
-        if dp[i-1][j] == 1:
+        if dp[i-1][j]:
             dp[i][j] = 1
 
-ans = 'No'
-for i in range(N):
-    if dp[i][tot//2] == 1:
-        ans = 'Yes'
-        break
-
-print(ans)
+if dp[N][tot//2]:
+    print('Yes')
+else:
+    print('No')
