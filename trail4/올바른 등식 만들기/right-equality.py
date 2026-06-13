@@ -6,21 +6,13 @@ lst = list(map(int, input().split()))
 # 합으로 dp
 
 # dp[i]: 계산했을 때 합이 i가 되는 가짓수
-dp = {}
+dp = {0:1}
 cnt = 0
 
-if lst[0] == 0:
-    dp[0] = 2
-else:
-    dp[lst[0]] = 1
-    dp[-lst[0]] = 1
 
 
 for n, num in enumerate(lst):
     ndp = {}
-    
-    if n == 0:
-        continue
     
     # 0 하나마다 경우의 수 2배씩 늘어나니까 미리 세두고
     if num == 0:
