@@ -27,13 +27,10 @@ for i in range(N):
             if k == 0:      # i-1번째 숫자를 뺀 상태면 (k==0) 새로운 구간 시작
                 if j < M:
                     dp[i+1][j+1][1] = max(dp[i+1][j+1][1], dp[i][j][k] + lst[i])
-            else:           # i-1번째 숫자가 포함된 상태면 구간 이어짐
-                dp[i+1][j][1] = max(dp[i+1][j][1], dp[i][j][k] + lst[i])
-
-            # i번째 숫자 제외
-            if k == 0:      # i-1번째 숫자를 뺀 상태면 (k==0) 빼는 게 이어짐
                 dp[i+1][j][0] = max(dp[i+1][j][0], dp[i][j][k])
             else:           # i-1번째 숫자가 포함된 상태면 구간 이어짐
+                dp[i+1][j][1] = max(dp[i+1][j][1], dp[i][j][k] + lst[i])
+                
                 dp[i+1][j][0] = max(dp[i+1][j][0], dp[i][j][k])
 
 # for row in dp:
