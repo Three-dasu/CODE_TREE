@@ -1,34 +1,33 @@
-# 필요한 상수를 정의합니다.
-MOD = 10**9 + 7
-MAXN = 1005
+N = int(input())
 
-# n 값을 입력받습니다.
-n = int(input())
+# 특정 시점에서 t의 개수와 연속한 b의 개수가 같으면 같음
+# dp[i][j][k]: i번째 날에 받은 j개의 B와 k개의 T로 살아남은 경우의 수
+# 이진수로 한다면...?! 차이가 없는데 말만 2차원이지 배열 요소 개수는 똑같
 
-# 동적 프로그래밍 배열을 초기화합니다.
-dp = [[[0 for _ in range(5)] for _ in range(5)] for _ in range(MAXN)]
+dp = [[[0]*3 for _ in range(3)] for _ in range(N+1)]
+dp[0][0][0] = 1
 
-# 초기 상태를 설정합니다.
-dp[1][1][0] = 1  # 첫 번째 날에 T를 받은 경우
-dp[1][0][1] = 1  # 첫 번째 날에 B를 받은 경우
-dp[1][0][0] = 1  # 첫 번째 날에 G를 받은 경우
+for i in range(N):
 
-# 동적 프로그래밍을 사용해 문제를 해결합니다.
-# dp[i][j][k] :: i번째 날에, T를 총합 j회 받았고, B를 최근 k회 연속 받은 경우의 가짓수
-for i in range(1, n):
     for j in range(3):
         for k in range(3):
-            # 다음 날로 넘어가는 경우의 수를 갱신합니다.
-            dp[i + 1][j + 1][0] = (dp[i + 1][j + 1][0] + dp[i][j][k]) % MOD
-            dp[i + 1][j][0] = (dp[i + 1][j][0] + dp[i][j][k]) % MOD
+
+            # G: B 개수 초기화
+            dp[i+1][0][k] += dp[i][j][k]
+
+            # B
+            if j < 2:
+                dp[i+1][j+1][k] += dp[i][j][k]
+
+            # T: B 개수 초기화
             if k < 2:
-                dp[i + 1][j][k + 1] = (dp[i + 1][j][k + 1] + dp[i][j][k]) % MOD
+                dp[i+1][0][k+1] += dp[i][j][k]
 
-# 최종 결과를 계산합니다.
-ans = 0
-for j in range(3):
-    for k in range(3):
-        ans = (ans + dp[n][j][k]) % MOD
 
-# 결과를 출력합니다.
-print(ans)
+    # for row in dp:
+    #     for val in row:
+    #         print(val, end=' ')
+    #     print()
+    # print()
+
+print(sum(sum(row) for row in dp[N]) % (10**9 + 7))
