@@ -10,15 +10,13 @@ dp = [[0]*10 for _ in range(N)]
 for j in range(1, 10):
     dp[0][j] = 1
 
-for i in range(N-1):
+for i in range(1, N):
     for j in range(10):
-        if dp[i][j] == -1:
-            continue
-        
+        # 직전 숫자 k
         for k in (j-1, j+1):
-            if k<0 or k>=10:
+            if k<0 or k>=10 or dp[i-1][k] == 0:
                 continue
 
-            dp[i+1][k] = (dp[i+1][k] + dp[i][j]) % MOD
+            dp[i][j] = (dp[i][j] + dp[i-1][k]) % MOD
 
 print(sum(dp[N-1]) % MOD)
