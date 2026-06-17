@@ -12,19 +12,16 @@ for j in range(N):
         dp[0][j] = 0
 
 
-for i in range(1, M):
+for i in range(M-1):
     for j in range(N):
-        for k in range(N):
-            if dp[i-1][k] == -1:
-                continue
-
-            # 오늘 옷 j를 입는 게 가능하면. k는 이전에 체크 했을테니 따로 조건 필요 x
-            if s[j] <= i <= e[j]:
-                # 이전 옷과 같음 -> 이 경우를 봐야 하나? -> 봐야지 그 날에 같은 옷만 입을 수 있는 상황도 있으니까   
-                if k == j:
-                    dp[i][j] = max(dp[i][j], dp[i-1][k])
-                else: # 이전 옷과 다름
-                    dp[i][j] = max(dp[i][j], dp[i-1][k] + abs(v[k]-v[j]))
+        if s[j]<=i<=e[j] and dp[i][j] >= 0:
+            for k in range(N):
+                if s[k] <= i+1 <= e[k]:
+                    # 다음 옷과 같음 -> 이 경우를 봐야 하나? -> 봐야지 그 날에 같은 옷만 입을 수 있는 상황도 있으니까   
+                    if k == j:
+                        dp[i+1][k] = max(dp[i+1][k], dp[i][j])
+                    else: # 다음 옷과 다름
+                        dp[i+1][k] = max(dp[i+1][k], dp[i][j] + abs(v[k]-v[j]))
 
 # for row in dp:
 #     for val in row:
