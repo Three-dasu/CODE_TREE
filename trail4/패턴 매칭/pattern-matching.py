@@ -48,34 +48,28 @@ dp[0][0] = 1
 #     dp[0][j] = 0
 
 for i in range(N+1):
-    for j in range(M):
+    for j in range(M+1):  # j확인하게 되면서 또 여기가 재랄이 나는구나.... 기존에 M이었으니 M+1로 고쳐야지...
         if dp[i][j] == 0:
             continue
         
-        if len(p[j+1]) == 1:
-            if i < N:
-                if p[j+1] == '.' or p[j+1] == s[i+1]:
-                    dp[i+1][j+1] = 1
-                else:
-                    dp[i+1][j+1] = max(dp[i+1][j+1], 0)
+        if j < M:
+            if len(p[j+1]) == 1:
+                if i < N:
+                    if p[j+1] == '.' or p[j+1] == s[i+1]:
+                        dp[i+1][j+1] = 1
+                    else:
+                        # 여기 max는 왜 안써도 되는거야 dp[i+1][j+1]이 1일 수도 있잖어
+                        dp[i+1][j+1] = max(dp[i+1][j+1], 0)
 
-        else:   # * 달린 경우
-            # 없다 치고 p 하나 넘어가기
-            dp[i][j+1] = max(dp[i][j+1], dp[i][j])
+            else:   # * 달린 경우
+                # 없다 치고 p 하나 넘어가기
+                # dp[i][j] 0일때 continue 해놓고 max를 왜하는 건데. 그치만 기억하기 위해 냅두자
+                dp[i][j+1] = max(dp[i][j+1], dp[i][j])
 
-            if i < N:
-                # 둘이 똑같음
-                if p[j+1][0] == s[i+1]:
-                    # 안똑같을 때까지 쭉 true로 밀기
-                    for ni in range(i+1, N+1):
-                        if p[j+1][0] != s[ni]:
-                            break
-                        dp[ni][j+1] = 1
-                
-                # 무적의 . 케이스 끝까지 쭉 true로 밀기
-                elif p[j+1][0] == '.':
-                    for ni in range(i+1, N+1):
-                        dp[ni][j+1] = 1
+        if len(p[j])==2:    # 와 밑에 바꾸려면 p[j]로 확인해줘야 하네.....
+            # 둘이 똑같음 or 무적의 . 케이스 끝까지 쭉 true로 밀기
+            if i < N and (p[j][0] == s[i+1] or p[j][0] == '.'):
+                dp[i+1][j] = 1
 
                 # 다르면 그냥 없다치고 넘어가면 되니까 필요 없을 듯 주석처리
                 # else:
