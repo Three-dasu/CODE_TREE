@@ -22,20 +22,20 @@ dp = [[0]*(M+1) for _ in range(N+1)]
 dp[0][0] = 0
 
 for i in range(1, N+1):
-    dp[i][0] = i
+    dp[i][0] = 0
 
 for j in range(1, M+1):
-    dp[0][j] = j
+    dp[0][j] = 0
 
 for i in range(1, N+1):
     for j in range(1, M+1):
         
         if s[i-1] == t[j-1]:
-            # dp[i][j] =  min(dp[i][j], dp[i-1][j-1] + 1) 요거 비효율
-            dp[i][j] = dp[i-1][j-1] + 1
+            dp[i][j] = max(dp[i][j], dp[i-1][j-1]+1)
+        
         else:
-            # dp[i][j] = min(dp[i][j], dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1] + 2) 요거 비효율
-            dp[i][j] = min(dp[i-1][j]+1, dp[i][j-1]+1)
+            dp[i][j] = max(dp[i][j], dp[i-1][j], dp[i][j-1])
+            
 
 # for row in dp:
 #     for val in row:
@@ -43,4 +43,4 @@ for i in range(1, N+1):
 #     print()
 # print()
 
-print(dp[N][M])
+print(N+M-dp[N][M])
