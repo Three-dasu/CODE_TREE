@@ -18,7 +18,7 @@ dp[i][j]: s를 i까지, t를 j까지 봤을 때 상위수열 최단길이
 """
 INF = float('inf')
 
-dp = [[INF]*(M+1) for _ in range(N+1)]
+dp = [[0]*(M+1) for _ in range(N+1)]
 dp[0][0] = 0
 
 for i in range(1, N+1):
@@ -35,7 +35,7 @@ for i in range(1, N+1):
             dp[i][j] = dp[i-1][j-1] + 1
         else:
             # dp[i][j] = min(dp[i][j], dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1] + 2) 요거 비효율
-            dp[i][j] = min(dp[i][j], dp[i-1][j]+1, dp[i][j-1]+1)
+            dp[i][j] = min(dp[i-1][j]+1, dp[i][j-1]+1)
 
 # for row in dp:
 #     for val in row:
