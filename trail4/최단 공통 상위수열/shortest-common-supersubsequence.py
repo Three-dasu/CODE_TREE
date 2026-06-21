@@ -21,22 +21,21 @@ INF = float('inf')
 dp = [[INF]*(M+1) for _ in range(N+1)]
 dp[0][0] = 0
 
-for i in range(N+1):
-    for j in range(M+1):
-        if dp[i][j] == INF:
-            continue
+for i in range(1, N+1):
+    dp[i][0] = i
 
-        # 같은 경우엔 둘 다 하나씩 더 보고 길이 1 추가
-        if i<N and j<M and s[i]==t[j]:
-            dp[i+1][j+1] = min(dp[i+1][j+1], dp[i][j] + 1)
+for j in range(1, M+1):
+    dp[0][j] = j
+
+for i in range(1, N+1):
+    for j in range(1, M+1):
+        
+        if s[i-1] == t[j-1]:
+            # dp[i][j] =  min(dp[i][j], dp[i-1][j-1] + 1) 요거 비효율
+            dp[i][j] = dp[i-1][j-1] + 1
         else:
-            # 다른 경우, i만 하나 더 보고 그 전 값에서 문자 하나 추가 (길이 +1)
-            if i<N:
-                dp[i+1][j] = min(dp[i+1][j], dp[i][j]+1)
-
-            # 다른 경우, j만 하나 더 보고 그 전 값에서 문자 하나 추가 (길이 + 1)
-            if j<M:
-                dp[i][j+1] = min(dp[i][j+1], dp[i][j]+1)
+            # dp[i][j] = min(dp[i][j], dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1] + 2) 요거 비효율
+            dp[i][j] = min(dp[i][j], dp[i-1][j]+1, dp[i][j-1]+1)
 
 # for row in dp:
 #     for val in row:
