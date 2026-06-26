@@ -20,20 +20,22 @@ SortedSet에 있는 값중에 n보다 작은 최초의 값을 찾아야 하는 �
 다 음수로 처리하면 음수에서 -n보다 크거나 같은 최초의 값 찾을 수 있고
 거기 앉히고 cnt += 1 한 뒤에 그 값 삭제하면 됨
 
-
+괜히 기대했죠? 객관적으로 봐도 아니죠?
+자기 객관화를 해봅시ekkkk
 """
 from sortedcontainers import SortedSet
-ss = SortedSet([-x for x in range(1, M+1)])
+ss = SortedSet([x for x in range(1, M+2)])
 
 cnt = 0
+# print(ss)
 for i, n in enumerate(lst):
-    idx = ss.bisect_left(-n)
-    # print(ss)
-    if idx == len(ss):
+    idx = ss.bisect_right(n)
+    if idx == len(ss) or idx == 0:
         break
 
-    num = ss[idx]
-
+    num = ss[idx-1]
+    # print(ss)
+    # print('smaller than', n, 'is', num, 'at', idx-1)
     ss.remove(num)
     cnt += 1
 
