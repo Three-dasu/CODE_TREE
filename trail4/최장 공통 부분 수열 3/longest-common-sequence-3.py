@@ -3,8 +3,6 @@ a = list(map(int, input().split()))
 b = list(map(int, input().split()))
 
 """
-
-
 dp[i][j] = A의 i까지, B의 j 까지 봤을 때 공통 부분 수열의 최대 길이
 """
 
@@ -15,18 +13,12 @@ for i in range(N, -1, -1):
         
         if i>0 and j>0 and a[i-1] == b[j-1]:
             dp[i-1][j-1] = max(dp[i-1][j-1], dp[i][j] + 1)
-        
-        # push에서 조건 달기가 좀 애매하네 a[i] != b[j]를 어따 넣어야 하는거야
-        if i>0:
-            dp[i-1][j] = max(dp[i-1][j], dp[i][j])
-        if j>0:
-            dp[i][j-1] = max(dp[i][j-1], dp[i][j])
+        else:
+            if i>0:
+                dp[i-1][j] = max(dp[i-1][j], dp[i][j])
+            if j>0:
+                dp[i][j-1] = max(dp[i][j-1], dp[i][j])
 
-# for row in dp:
-#     for val in row:
-#         print(val, end=' ')
-#     print()
-# print()
 
 nxt_A = [[N]*1001 for _ in range(N+1)]
 nxt_B = [[M]*1001 for _ in range(M+1)]
