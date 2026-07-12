@@ -1,31 +1,30 @@
 N = int(input())
 lst = list(map(int, input().split()))
 
-import heapq as hg
+import heapq
+"""
+중복이 있어서 힙큐로 풀어야 하네....
+힙큐를 매번 만들기는 좀 그렇고
+매번 이진탐색 하면서 삭제할 값 어딨나 찾기도 좀 그렇고
+
+역순으로 미리 다 빼놓고 하나씩 더하는 걸로
 
 """
-1. 앞에서 K개 삭제
-2. 힙큐로 만들기
-3. 최솟값 제외 평균내기
+# N-2개까지 제외된 상태
+hf = []
+heapq.heappush(hf, lst[-1])
 
-둘 중에 하나는 없어야 함
-K개 삭제를 없애려면
-그냥 앞에서 K개를 평균구할 때 합에서 뺴고 개수도 K만큼 빼면 되긴 하는데
-제외하는 최솟값이 K개에 없어야 가능한 거잖음
+cur_sum, ans = lst[-1], 0
 
-K개 삭제가 아니라 뒤에서부터 하나씩 힙큐에 넣으면 되는구나
-이런 발상의 전환 같으니
-"""
-ans = 0
+for k in range(N-2, 0, -1):
+    # k번째 값 힙큐에 추가 (삭제한 후 상황)
+    heapq.heappush(hf, lst[k])
+    cur_sum += lst[k]
 
-hq = [lst[N-1]]
-cur_sum = lst[N-1]
+    # 가장 작은 값 제외한 평균 구하기
+    mean = (cur_sum - hf[0]) / (len(hf)-1)
 
-for i in range(N-2, 0, -1):
-    hg.heappush(hq, lst[i])
-    cur_sum += lst[i]
-
-    mean = (cur_sum - hq[0]) / (len(hq)-1)
-    ans = max(ans, mean)
+    if mean > ans:
+        ans = mean
 
 print(f'{ans:.2f}')
