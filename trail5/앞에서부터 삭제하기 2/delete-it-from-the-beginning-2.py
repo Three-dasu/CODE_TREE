@@ -1,7 +1,7 @@
 N = int(input())
 lst = list(map(int, input().split()))
 
-import heapq
+import heapq as hf
 """
 중복이 있어서 힙큐로 풀어야 하네....
 힙큐를 매번 만들기는 좀 그렇고
@@ -11,18 +11,18 @@ import heapq
 
 """
 # N-2개까지 제외된 상태
-hf = []
-heapq.heappush(hf, lst[-1])
+hq = []
+hf.heappush(hq, lst[-1])
 
 cur_sum, ans = lst[-1], 0
 
 for k in range(N-2, 0, -1):
     # k번째 값 힙큐에 추가 (삭제한 후 상황)
-    heapq.heappush(hf, lst[k])
+    hf.heappush(hq, lst[k])
     cur_sum += lst[k]
 
     # 가장 작은 값 제외한 평균 구하기
-    mean = (cur_sum - hf[0]) / (len(hf)-1)
+    mean = (cur_sum - hq[0]) / (len(hq)-1)
 
     if mean > ans:
         ans = mean
