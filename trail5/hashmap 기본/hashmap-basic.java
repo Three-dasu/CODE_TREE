@@ -1,4 +1,6 @@
 import java.util.*;
+import java.io.*;
+
 
 class Query {
     String cmd;
@@ -15,27 +17,31 @@ public class Main {
     static List<Query> qlst = new ArrayList<>();
     static HashMap<Integer, Integer> dict = new HashMap<>();
 
-    static void init() {
-        Scanner sc = new Scanner(System.in);
+    static void init() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        // N 읽기
+        N = Integer.parseInt(br.readLine().trim());
 
-        N = sc.nextInt();
+        for (int n = 0; n < N; n++) {
+            // 1. 한 줄을 통째로 읽어서 공백 기준으로 쪼갤 준비
+            StringTokenizer st = new StringTokenizer(br.readLine());
 
-        for (int n=0; n<N; n++) {
-            String cmd = sc.next();
-            if (cmd.equals("add")) {
-                int a = sc.nextInt(); int b = sc.nextInt();
-                qlst.add(new Query(cmd, a, b));
+            String cmd = st.nextToken();
+            int a = Integer.parseInt(st.nextToken());
+            int b = 0; // 기본값
+
+            // 2. 이 줄에 더 쪼갤 데이터(b)가 남아있다면 읽기!
+            if (st.hasMoreTokens()) { 
+                b = Integer.parseInt(st.nextToken());
             }
-            else {
-                int a = sc.nextInt();
-                qlst.add(new Query(cmd, a, 0));
-            }
-            
+
+            qlst.add(new Query(cmd, a, b));
         }
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         init();
 
         for (Query q : qlst) {
