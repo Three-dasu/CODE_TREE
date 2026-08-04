@@ -2,106 +2,51 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    static int N, M, K;
-    static List<String> slst = new ArrayList<>();
-    static List<int[]> square = new ArrayList<>();
-    static int[][] preSumA, preSumB, preSumC;
-
-    static void init() throws IOException {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        String str;
-        int num;
-        int[] tmp;
 
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        K = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
 
-        preSumA = new int[N+1][M+1];
-        preSumB = new int[N+1][M+1];
-        preSumC = new int[N+1][M+1];
+        int[][] preSumA = new int[N + 1][M + 1];
+        int[][] preSumB = new int[N + 1][M + 1];
+        int[][] preSumC = new int[N + 1][M + 1];
 
-        for (int n=0; n<N; n++) {
+        // 1. 누적 합 배열 생성 (String 대신 char 원시 타입으로 즉시 처리)
+        for (int i = 1; i <= N; i++) {
+            String str = br.readLine();
+            for (int j = 1; j <= M; j++) {
+                char c = str.charAt(j - 1); // 객체 생성 없이 char 추출
+
+                // 조건문 비교도 원시 타입 '==' 활용
+                preSumA[i][j] = preSumA[i-1][j] + preSumA[i][j-1] - preSumA[i-1][j-1] + (c == 'a' ? 1 : 0);
+                preSumB[i][j] = preSumB[i-1][j] + preSumB[i][j-1] - preSumB[i-1][j-1] + (c == 'b' ? 1 : 0);
+                preSumC[i][j] = preSumC[i-1][j] + preSumC[i][j-1] - preSumC[i-1][j-1] + (c == 'c' ? 1 : 0);
+            }
+        }
+
+        // 2. 출력 병목 해결을 위한 StringBuilder
+        StringBuilder sb = new StringBuilder();
+
+        // 3. 쿼리를 배열에 저장하지 않고 입력받는 즉시 처리
+        for (int k = 0; k < K; k++) {
             st = new StringTokenizer(br.readLine());
-            str = st.nextToken();
-            slst.add(str);
-        }
+            int r1 = Integer.parseInt(st.nextToken());
+            int c1 = Integer.parseInt(st.nextToken());
+            int r2 = Integer.parseInt(st.nextToken());
+            int c2 = Integer.parseInt(st.nextToken());
 
-        for (int k=0; k<K; k++) {
-            tmp = new int[4];
-            st = new StringTokenizer(br.readLine());
+            int valA = preSumA[r2][c2] - preSumA[r2][c1-1] - preSumA[r1-1][c2] + preSumA[r1-1][c1-1];
+            int valB = preSumB[r2][c2] - preSumB[r2][c1-1] - preSumB[r1-1][c2] + preSumB[r1-1][c1-1];
+            int valC = preSumC[r2][c2] - preSumC[r2][c1-1] - preSumC[r1-1][c2] + preSumC[r1-1][c1-1];
             
-            for (int i=0; i<4; i++) {
-                num = Integer.parseInt(st.nextToken());
-                tmp[i] = num;
-            }
-            square.add(tmp);
+            // println 대신 버퍼에 기록
+            sb.append(valA).append(" ").append(valB).append(" ").append(valC).append("\n");
         }
-        String chr;
-        for (int i=1; i<N+1; i++) {
-            for (int j=1; j<M+1; j++) {
-                chr = slst.get(i-1).charAt(j-1)+"";
-
-                preSumA[i][j] = preSumA[i-1][j] + preSumA[i][j-1]
-                                - preSumA[i-1][j-1] + ((chr.equals("a")) ? 1 : 0);
-                preSumB[i][j] = preSumB[i-1][j] + preSumB[i][j-1]
-                                - preSumB[i-1][j-1] + ((chr.equals("b")) ? 1 : 0);
-                preSumC[i][j] = preSumC[i-1][j] + preSumC[i][j-1]
-                                - preSumC[i-1][j-1] + ((chr.equals("c")) ? 1 : 0);
-            }
-        }
-    }
-
-    static void myp() {
-        for (String tmpStr : slst) {
-            System.out.println(tmpStr);
-        }
-
-        for (int[] tmpIntArr : square) {
-            System.out.println(Arrays.toString(tmpIntArr));
-        }
-
-        for (int[] row : preSumA) {
-            for (int val : row) {
-                System.out.print(val + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-
-        for (int[] row : preSumC) {
-            for (int val : row) {
-                System.out.print(val + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-
-        for (int[] row : preSumC) {
-            for (int val : row) {
-                System.out.print(val + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-
-    public static void main(String[] args) throws IOException {
-        init();
-
-        // myp();
-
-        int valA, valB, valC;
-        for (int[] q : square) {
-            valA = preSumA[q[2]][q[3]] - preSumA[q[2]][q[1]-1]
-                    - preSumA[q[0]-1][q[3]] + preSumA[q[0]-1][q[1]-1];
-            valB = preSumB[q[2]][q[3]] - preSumB[q[2]][q[1]-1]
-                    - preSumB[q[0]-1][q[3]] + preSumB[q[0]-1][q[1]-1];
-            valC = preSumC[q[2]][q[3]] - preSumC[q[2]][q[1]-1]
-                    - preSumC[q[0]-1][q[3]] + preSumC[q[0]-1][q[1]-1];
-            
-            System.out.println(valA +" "+ valB +" "+ valC);
-        }
+        
+        // 마지막에 한 번만 출력
+        System.out.print(sb);
     }
 }
