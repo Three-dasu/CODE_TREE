@@ -5,7 +5,6 @@ public class Main {
     static int N, Q;
     static int[] point, lst;
     static Set<Integer> tSet = new TreeSet<>();
-    static Map<Integer, Integer> hMap = new HashMap<>();
     
     static int bisectLeft(int[] lst, int x) {
         int left = 0;int right = lst.length;
@@ -46,20 +45,15 @@ public class Main {
             tSet.add(n);
         }
 
-        int idx = 1;
-        for (int n : tSet) {
-            hMap.put(n, idx++);
-        }
-
         lst = new int[tSet.size()];
-        idx = 0;
+        int idx = 0;
 
         for (int n : tSet) {
             lst[idx++] = n;
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         Scanner sc = new Scanner(System.in);
 
